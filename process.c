@@ -1,51 +1,95 @@
-//ler o arquivo e implementar o codigo para encontrar o clique maximo....
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-int arquivo json = '';
+#define MAX_NODES 100
 
-int verificar_arquivo( *arquivo_json){
- //verificar a existencia do arquivo
+typedef struct {
+    int adjacencyMatrix[MAX_NODES][MAX_NODES];
+    char nodes[MAX_NODES][50];
+    int nodeCount;
+} MaxConnectedGraph;
+
+// Inicializa o grafo
+void initGraph(MaxConnectedGraph *graph) {
+    graph->nodeCount = 0;
+    memset(graph->adjacencyMatrix, 0, sizeof(graph->adjacencyMatrix));
 }
 
+// Adiciona um nó ao grafo
+void addNode(MaxConnectedGraph *graph, const char *node) {
+    int i;
+    // Verifica se o nó já existe
+    for (i = 0; i < graph->nodeCount; i++) {
+        if (strcmp(graph->nodes[i], node) == 0) {
+            printf("Nó '%s' já existe no grafo.\n", node);
+            return;
+        }
+    }
 
-struct dfs {
+    // Adiciona o nó ao grafo
+    strcpy(graph->nodes[graph->nodeCount], node);
 
-  int adj[10][10];
-x
-};
+    // Conecta o novo nó a todos os outros nós existentes
+    for (i = 0; i < graph->nodeCount; i++) {
+        graph->adjacencyMatrix[graph->nodeCount][i] = 1;
+        graph->adjacencyMatrix[i][graph->nodeCount] = 1;
+    }
 
-typedef *linked_list {
-
+    graph->nodeCount++;
 }
 
-//funcao para criar aresta
-//funcao para remover arestar
-//funcao para mostrar uma aresta
-
-int matrix[4][10];
-
-matrix = { 
-    {0,2,3,2,1,2,3,3,4,2},
-    {1,2,3,3,4,4,5,6,6,5},
-    {2,1,2,1,2,3,1,2,3,1},
-    {2,3,4,2,1,3,4,5,3,1},
-};
-//criar uma matriz de adjacencias;
-//search the maximal connection of vertices -----> 
-
-int maximal(int *arr,int size) {
-    for(int i = 0 ; i < size ; i++) {
-    for(int j=i+1; j < size; j++){
-
+// Exibe o grafo
+void displayGraph(MaxConnectedGraph *graph) {
+    int i, j;
+    printf("Grafo (matriz de adjacência):\n");
+    for (i = 0; i < graph->nodeCount; i++) {
+        printf("%s -> ", graph->nodes[i]);
+        for (j = 0; j < graph->nodeCount; j++) {
+            if (graph->adjacencyMatrix[i][j]) {
+                printf("%s ", graph->nodes[j]);
+            }
+        }
+        printf("\n");
     }
 }
+
+// Realiza a busca em profundidade (DFS)
+void dfs(MaxConnectedGraph *graph, int startIndex, int visited[]) {
+    visited[startIndex] = 1;
+    printf("%s ", graph->nodes[startIndex]);
+
+    for (int i = 0; i < graph->nodeCount; i++) {
+        if (graph->adjacencyMatrix[startIndex][i] && !visited[i]) {
+            dfs(graph, i, visited);
+        }
+    }
+}
+
+// Função principal
+int main() {
+    MaxConnectedGraph graph;
+    initGraph(&graph);
+
+    addNode(&graph, "A");
+    addNode(&graph, "B");
+    addNode(&graph, "C");
+    addNode(&graph, "D");
+
+    printf("Grafo:\n");
+    displayGraph(&graph);
+
+    printf("\nDFS a partir do nó 'A':\n");
+    int visited[MAX_NODES] = {0};
+    dfs(&graph, 0, visited); // Começa do índice 0 (nó "A")
+
+    return 0;
 }
 
 
-free(dfs);
 
-return 0; 
 
-}
 
-//implementacao basica de uma dfs
-.......
+
+
+
