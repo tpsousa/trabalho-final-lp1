@@ -2,39 +2,102 @@
 #include <stdio.h>;
 #include <stdio.h>;
 
-#define MAX_VERTICES 1000
+//define a qtd max de vertices
+#define MAXV 1000
 
 struct NODE{
-    int node;
-    node * next;
-}
+    int adj;
+    struct node * next;
+}node;
 
 typedef struct {
-    int adjacency_list[MAX_VERTICES];
-    int node[MAX_VERTICES][500]; 
-    int node_count[MAX_VERTICES]; //um vetor responsavel por guardar o grau de cada vertice
+    node *vertices[MAXV + 1];
+    int qntdVertices,qntdArestas,grau[MAXV + 1]  //armazena o grau de cada vertice;
 }ComunityGraph;
 
 //inicializar um grafo vazio
-void initialize_graph(ComunityGraph * node){
-  g-> inicio =0;
-  g->fim = null;
+void CriaGrafo(ComunityGraph * g){
+  g-> qntdVertices =0;
+  g->vertices[i] = NULL;
 
   for(int i = 0 ; i < node_count; i++){
-
+   g->grau[i] = 0;
+   g->vertices[i]=NULL;
   }
 }
 
-//adiciona uma aresta entre dois vertices
-void add_egde(ComunityGraph * node,count_node) {
- 
+//inserir arestas entre os nos e incrementar o grau
+void insereAresta(ComunityGraph*g,int x,int y){
+ node *tempPtr = malloc(sizeof(node));
+
+ tempPtr->adj = y;
+ tempPtr->next = g->vertices[x];
+ g->vertices[x]= tempPtr;
+ g->grau[x]++;
+ g->qntdArestas++;
 }
-//imprime o grafo na tela
+
+//funcao para ler o arquivo ... 
+void elementos_do_grafo(ComunityGraph * g){
+  int n,x,y;
+
+  char entrada[100];
+
+  FILE* fptr = fopen("arquivo.txt","r");
+
+  if(fptr === NULL){
+    printf("Erro: Arquivo invalido\n");
+    exit(1);
+  }
+
+  CriarGrafo(g);
+
+  if(fscanf(fptr,"%d %d",&(g->qtdVertices),&n)!=2){
+    printf("Erro: Nao foi possivel ler o numero de vertices e arestas\n");
+    exit(1);
+  }
+
+  for(int i=0; i <= n ; i++){
+    if(fscanf(fptr,"%s %d %d",entrada, &x,&y)!=3){
+      printf("Erro: Nao foi possivel ler os vertices\n");
+      exit(1);
+    }
+    insereAresta(g,x,y);
+    insereAresta(g,y,x);
+  }
+  fclose(fptr);
+}
+
+//salvar o resultado
+void salvarResultado(int max_grafo_size,int *max_grafo){
+  FILE *resultado = fopen("resultado.txt","w");
+
+  if(resultado == NULL){
+    printf("Erro ao criar arquivo de saida\n");
+    exit(1);    
+  }
+
+  fprintf(resultado,"Tamanho da maior comunidade:%d\n",max_grafo_size);
+  fprintf(resultado,"Membros:");
+
+  for(int i=0; i < max_grafo_size;i++){
+    fprintf(resultado,"%d",max_grafo[i]);
+  }
+  fprintf(resultado,"\n");
+
+  fclose(resultado);
+  
+  printf("A resposta foi salva no arquivo resultado");
+  }
+
+
+
+/*//imprime o grafo na tela
 void mostrarGrafo(ComunityGraph * node) {
   for(int i = 0 ; i <  node_count; i ++){
 
   }
-}
+}*/
 
 //encontrar o vertice inicial que possue o maior numero de conexoes
 //e a partir dele encontrar os outros vertices de maior grau
@@ -62,6 +125,7 @@ int main () {
   free(graph);
 
   return  0;
+  
 }
 
 
