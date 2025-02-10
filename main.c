@@ -99,7 +99,26 @@ void mostrarGrafo(ComunityGraph * node) {
 
   }
 }*/
+//quicksort para ordenar o grau dos vertices por ordem decrescente:
 
+void quicksort(int arr[], int low, int high) {
+    if (low >= high) return; // Condição de parada
+
+    int pivot = arr[high]; 
+    int i = low, j = high;
+
+    while (i < j) {
+        while (arr[i] < pivot) i++;
+        while (arr[j] > pivot) j--;
+        if (i <= j) {
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+            i++;
+            j--;
+        }
+    }
+  }
 //encontrar o vertice inicial que possue o maior numero de conexoes
 //e a partir dele encontrar os outros vertices de maior grau
 //e verificar se esses vertices estao conectados com o usuario inicial
